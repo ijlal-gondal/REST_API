@@ -22,6 +22,7 @@ namespace REST_API.Models
         public DbSet<Customers> Customers {get; set;}
 
         public DbSet<Employees> Employees {get; set;}
+        public DbSet<Interventions> Interventions {get; set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +46,9 @@ namespace REST_API.Models
 
             modelBuilder.Entity<Employees>()
                 .ToTable("employees");
+
+            modelBuilder.Entity<Interventions>()
+                .ToTable("interventions");
 
 
 
