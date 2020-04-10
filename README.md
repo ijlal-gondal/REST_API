@@ -2,7 +2,7 @@
 # Updated REST_API
 
 -----------------------------------------------------------------
-Retrieving the current status of a all interventions that do not have a start date and are in "Pending" status.
+Retrieving the current status of all interventions that do not have a start date and are in "Pending" status.
 
 GET
 https://ijlal.azurewebsites.net/api/interventions/get/Status/Pending
@@ -19,7 +19,7 @@ IN THE BODY :
     {
       
     "status": "InProgress",
-    "ended_at": "2020-11-01T23:28:56.782Z"
+    "started_at": "2020-11-01T23:28:56.782Z"
     
 
     }
