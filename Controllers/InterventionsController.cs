@@ -21,19 +21,40 @@ namespace REST_API.Controllers
             _context = context;
         }
 
-        // GET: api/Interventions
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Interventions>>> GetInterventions()
+        public async Task<ActionResult<List<Interventions>>> GetInterventionsList()
         {
-            return await _context.Interventions.ToListAsync();
+
+          var list =  await _context.Interventions.ToListAsync();
+
+               if (list == null)
+            {
+                return NotFound();
+            }
+
+     
+        List<Interventions> listInterventions = new List<Interventions>();
+
+
+
+        foreach (var intervention in list){
+
+            if (intervention.Status == "Pending" || intervention.Status == "InProgress" ){
+         
+            listInterventions.Add(intervention);
+
+
+
+            }
         }
 
-        // GET: api/Interventions/5
+
+             return listInterventions;
+
+            }
 
 
- //https://stackoverflow.com/questions/16507222/create-json-object-dynamically-via-javascript-without-concate-strings
- 
-//  return this.Content(returntext, "application/json");
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Interventions>> GetInterventions(long id, string Status)
@@ -46,72 +67,121 @@ namespace REST_API.Controllers
             }
 
             var jsonGet = new JObject ();
-            jsonGet["status"] = Interventions.Status;
+            jsonGet["Status"] = Interventions.Status;
             return Content  (jsonGet.ToString(), "application/json");
         }
 
-        // PUT: api/Interventions/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutInterventions(long id, Interventions Interventions)
-        // {
-        //     if (id != Interventions.id)
-        //     {
-        //         return BadRequest();
-        //     }
-
-        //     _context.Entry(Interventions).State = EntityState.Modified;
-
-        //     try
-        //     {
-        //         await _context.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         if (!InterventionsExists(id))
-        //         {
-        //             return NotFound();
-        //         }
-        //         else
-        //         {
-        //             throw;
-        //         }
-        //     }
-            
-        //     var jsonPut = new JObject ();
-        //     jsonPut["Update"] = "Update done to Interventions id : " + id;
-        //     return Content  (jsonPut.ToString(), "application/json");
-
-        // }
 
 
 
-   [HttpPut("{id}")]
-        public IActionResult PutInterventionStatus(long id, Interventions item)
+
+    [HttpGet("get/Status/all")]
+
+        public async Task<ActionResult<IEnumerable<Interventions>>> GetInterventions()
         {
-            var inte = _context.Interventions.Find(id); 
-            if (inte == null)
+        return await _context.Interventions.ToListAsync();
+        }
+
+
+        [HttpGet("get/Status/{id}")]
+        public IEnumerable<Interventions> GetInterventionsId(long id)
+        {
+        IQueryable<Interventions> Interventions =
+        from inte in _context.Interventions
+        where inte.id == id
+        select inte;
+        return Interventions.ToList();
+        }
+
+
+        [HttpGet("get/Status/Pending")]
+        public IEnumerable<Interventions> GetInterventionsPending()
+        {
+        IQueryable<Interventions> Interventions =
+        from inte in _context.Interventions
+        where (inte.Status == "Pending") && (inte.started_at == default(DateTime))
+        select inte;
+        return Interventions.ToList();
+        }
+
+
+        [HttpGet("get/Status/completed")]
+        public IEnumerable<Interventions> GetInterventionsActive()
+        {
+        IQueryable<Interventions> Interventions =
+        from inte in _context.Interventions
+        where inte.Status == "Completed"
+        select inte;
+        return Interventions.ToList();
+        }
+
+
+        [HttpGet("get/Status/inprogress")]
+        public IEnumerable<Interventions> GetInterventionsIntervention()
+        {
+        IQueryable<Interventions> Interventions =
+        from inte in _context.Interventions
+        where inte.Status == "InProgress"
+        select inte;
+        return Interventions.ToList();
+        }
+
+
+        [HttpGet("get/Status/others")]
+        public IEnumerable<Interventions> GetInterventionsOthers()
+        {
+        IQueryable<Interventions> Interventions =
+        from inte in _context.Interventions
+        where inte.Status != "Completed" && inte.Status != "Pending" && inte.Status != "InProgress"
+        select inte;
+        return Interventions.ToList();
+
+        }
+
+
+
+        [HttpPut("{id}/start")]
+        public IActionResult PutInterventionStart(long id, Interventions item)
+        {
+            var inter = _context.Interventions.Find(id); 
+            if (inter == null)
             {
                 return NotFound();
             }
-            inte.Status = item.Status;
+            inter.started_at = item.started_at;
+            inter.Status = item.Status;
 
-            _context.Interventions.Update(inte);
+            _context.Interventions.Update(inter);
             _context.SaveChanges();
     
             var jsonPut = new JObject ();
-            jsonPut["Update"] = "Update done to Intervention id : " + id + " to the status : " + inte.Status;
+            jsonPut["Update"] = "Update done to intervention id : " + id + " start time set as : " + inter.started_at +  " and the Status us: " + inter.Status;
+            return Content  (jsonPut.ToString(), "application/json");
+        
+        }
+
+        [HttpPut("{id}/end")]
+        public IActionResult PutInterventionEnd(long id, Interventions item)
+        {
+            var inter = _context.Interventions.Find(id); 
+            if (inter == null)
+            {
+                return NotFound();
+            }
+            inter.ended_at = item.ended_at;
+            inter.Status = item.Status;
+
+            _context.Interventions.Update(inter);
+            _context.SaveChanges();
+    
+            var jsonPut = new JObject ();
+            jsonPut["Update"] = "Update done to intervention id : " + id + " end time set as : " + inter.ended_at + " and the Status us: " + inter.Status;
             return Content  (jsonPut.ToString(), "application/json");
         
         }
 
 
 
-
-        // POST: api/Interventions
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Interventions>> PostInterventions(Interventions Interventions)
         {
