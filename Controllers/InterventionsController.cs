@@ -99,7 +99,7 @@ namespace REST_API.Controllers
         {
         IQueryable<Interventions> Interventions =
         from inte in _context.Interventions
-        where (inte.Status == "Pending") && (inte.started_at == default(DateTime))
+        where (inte.Status == "Pending") && (!inte.started_at.HasValue)
         select inte;
         return Interventions.ToList();
         }
