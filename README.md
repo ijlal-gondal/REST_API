@@ -5,7 +5,7 @@
 Retrieving the current status of all interventions that do not have a start date and are in "Pending" status.
 
 GET
-https://ijlal.azurewebsites.net/api/interventions/get/Status/Pending
+https://tranquil-reaches-97237.herokuapp.com/api/interventions/get/Status/Pending
 
 -----------------------------------------------------------------
 
