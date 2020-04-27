@@ -155,7 +155,7 @@ namespace REST_API.Controllers
             _context.SaveChanges();
     
             var jsonPut = new JObject ();
-            jsonPut["Update"] = "Update done to intervention id : " + id + " start time set as : " + inter.started_at +  " and the Status us: " + inter.Status;
+            jsonPut["Update"] = "Update done to intervention id : " + id + " start time set as : " + inter.started_at +  " and the Status is: " + inter.Status;
             return Content  (jsonPut.ToString(), "application/json");
         
         }
@@ -175,7 +175,7 @@ namespace REST_API.Controllers
             _context.SaveChanges();
     
             var jsonPut = new JObject ();
-            jsonPut["Update"] = "Update done to intervention id : " + id + " end time set as : " + inter.ended_at + " and the Status us: " + inter.Status;
+            jsonPut["Update"] = "Update done to intervention id : " + id + " end time set as : " + inter.ended_at + " and the Status is: " + inter.Status;
             return Content  (jsonPut.ToString(), "application/json");
         
         }
