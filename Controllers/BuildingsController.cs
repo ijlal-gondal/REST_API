@@ -26,6 +26,13 @@ namespace REST_API.Controllers
 
 
 
+       // GET: api/Buildings
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Buildings>>> GetBuildings()
+        {
+            return await _context.Buildings.ToListAsync();
+        }
+
     [HttpGet("intervention")]
 
     public  ActionResult<List<Buildings>> GetBuildingsWithProblems()
