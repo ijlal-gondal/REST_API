@@ -24,6 +24,7 @@ namespace REST_API.Models
         public DbSet<Employees> Employees {get; set;}
         public DbSet<Interventions> Interventions {get; set;}
         public DbSet<Quotes> Quotes {get; set;}
+        public DbSet<Addresses> Addresses {get; set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Batteries>()
@@ -51,7 +52,11 @@ namespace REST_API.Models
                 .ToTable("interventions");
 
             modelBuilder.Entity<Quotes>()
-                .ToTable("quotes");                
+                .ToTable("quotes"); 
+                
+            modelBuilder.Entity<Addresses>()
+                .ToTable("addresses");                
+                               
 
 
 
