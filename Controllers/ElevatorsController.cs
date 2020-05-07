@@ -158,6 +158,25 @@ namespace REST_API.Controllers
         
         }
 
+        [HttpPost("{id}")]
+        public IActionResult PostElevatorStatus(long id, Elevators item)
+        {
+            var ele = _context.Elevators.Find(id); 
+            if (ele == null)
+            {
+                return NotFound();
+            }
+            ele.status = item.status;
+
+            _context.Elevators.Update(ele);
+            _context.SaveChanges();
+    
+            var jsonPost = new JObject ();
+            jsonPost["Update"] = "Update done to elevator id : " + id + " to the status : " + ele.status;
+            return Content  (jsonPost.ToString(), "application/json");
+        
+        }
+
 
 
         [HttpPost]
